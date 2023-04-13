@@ -14,7 +14,7 @@ In the `connectionConfig` the qlik host name, app ID and object ID can be set.
 
 The details of the `chartConfig` are explained below:
 
-* `dataIndexes` are the indexes of the group, subgroup and value within the qlik table. E.g. if the group dimension is the first column in the qlik table then the group index would be 0.
+* `dataIndexes` are the indexes of the group, subgroup and value columns within the qlik table. E.g. if the group dimension is the first column in the qlik table then the group index would be 0.
 * `dimensionNames` are the dimension field names in qlik that the user would to use as the group and subgroup.
 * `colorOrder` is the order of colours that will represent each subgroup.
 * `tableHeaders` is the column titles for the legend in order from left to right.
