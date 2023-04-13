@@ -1,25 +1,40 @@
-import logo from './logo.svg';
+import config from './config';
+import useApp from './qlik/hooks/useApp';
+import useObject from './qlik/hooks/useObject';
+import styled from 'styled-components';
 import './App.css';
+import StackedBarChart from './stacked-barchart/StackedBarChart';
+
+const StyledScreenContainer = styled.div`
+  height: 97vh;
+`;
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const {
+    connectionConfig: { host, appId, stackedBarChartId },
+    chartConfig: { dataIndexes, colorOrder, tableHeaders },
+  } = config;
+
+  const app = useApp(host, appId);
+  const { data } = useObject(app, stackedBarChartId);
+
+  const { groupDimIndex, subgroupDimIndex, valueDimIndex } = dataIndexes
+
+  if (data?.length) {
+    return (
+      <StyledScreenContainer>
+        <StackedBarChart
+          data={data}
+          groupDimIndex={groupDimIndex}
+          subgroupDimIndex={subgroupDimIndex}
+          valueDimIndex={valueDimIndex}
+          tableHeaders={tableHeaders}
+          colorOrder={colorOrder}
+        />
+      </StyledScreenContainer>
+    );
+  }
+  return <div>loading...</div>;
 }
 
 export default App;
