@@ -12,22 +12,20 @@ const StyledScreenContainer = styled.div`
 function App() {
   const {
     connectionConfig: { host, appId, stackedBarChartId },
-    chartConfig: { dataIndexes, colorOrder, tableHeaders },
+    chartConfig: { dataIndexes, dimensionNames, colorOrder, tableHeaders },
   } = config;
 
   const app = useApp(host, appId);
-  const { data, model, layout } = useObject(app, stackedBarChartId);
-
-  const { groupIndex, subgroupIndex, valueIndex } = dataIndexes
+  const { data } = useObject(app, stackedBarChartId);
+  const { groupIndex, subgroupIndex, valueIndex } = dataIndexes;
 
   if (data?.length) {
-    // app.clearAll()
     return (
       <StyledScreenContainer>
         <StackedBarChart
+          app={app}
           data={data}
-          model={model}
-          layout={layout}
+          dimensionNames={dimensionNames}
           groupIndex={groupIndex}
           subgroupIndex={subgroupIndex}
           valueIndex={valueIndex}

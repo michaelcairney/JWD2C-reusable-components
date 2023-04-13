@@ -1,6 +1,4 @@
-import selectHyperCubeValue from "../qlik/functions/selectHyperCubeValue";
-
-const defaultFormatter = (rawData, model, groupIndex, subgroupIndex, valueIndex, activeGroup) => {
+const defaultFormatter = (rawData, groupIndex, subgroupIndex, valueIndex, activeGroup) => {
 
   const qMatrix = rawData[0].qMatrix;
   const groupNames = qMatrix
@@ -13,9 +11,7 @@ const defaultFormatter = (rawData, model, groupIndex, subgroupIndex, valueIndex,
   const subgroupsData = subgroupNames.map((name) => {
     const filteredBySubgroup = qMatrix.filter((item) => item[subgroupIndex].qText === name)
     const total = filteredBySubgroup.reduce((accumulator, currentValue) => accumulator + currentValue[valueIndex].qNum, 0)
-    const qElemNumber = filteredBySubgroup[0][subgroupIndex].qElemNumber
-    const selectionHandler = async () => await selectHyperCubeValue(model, 1, qElemNumber)
-    return { name, total, selectionHandler }
+    return { name, total }
   })
 
   const subgroupsSortedbyTotal = subgroupsData.sort((a, b) => b.total - a.total)
@@ -23,7 +19,7 @@ const defaultFormatter = (rawData, model, groupIndex, subgroupIndex, valueIndex,
   const grandTotal = subgroupsData.reduce((accumulator, currentValue) => accumulator + currentValue.total, 0)
 
   // BAR DATA
-  const barData = groupNames.map((name) => ({ groupName: name, subgroupsData }));
+  const barData = groupNames.map((name) => ({ groupName: name }));
 
   // apply values
   qMatrix.forEach((item) => {

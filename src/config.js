@@ -13,6 +13,11 @@ const config = {
       valueIndex: 1,
     },
 
+    dimensionNames: {
+      group: "Month",
+      subgroup: "Business Line"
+    },
+
     colorOrder: [
       '#716196',
       '#588942',

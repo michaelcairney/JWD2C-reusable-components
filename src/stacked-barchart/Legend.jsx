@@ -78,7 +78,7 @@ const StyledIndexBar = styled.div`
   margin-right: 5%;
 `;
 
-const Legend = ({ data, colorOrder, activeSubgroup, tableHeaders }) => {
+const Legend = ({ data, colorOrder, activeSubgroup, tableHeaders, selectionHandler }) => {
   const tableHighlightColor = '#2f3b46';
   const tableColor = '#1d262c';
   return (
@@ -95,7 +95,7 @@ const Legend = ({ data, colorOrder, activeSubgroup, tableHeaders }) => {
           className="legendRow"
           id={subgroup.name}
           highlight={activeSubgroup === subgroup.name ? tableHighlightColor : tableColor}
-          onClick={subgroup.selectionHandler}
+          onClick={() => selectionHandler('subgroup', subgroup.name)}
         >
           <StyledRowItem className="child" id={subgroup.name}>
             <StyledIndexBar color={colorOrder[index]} /> {subgroup.name}

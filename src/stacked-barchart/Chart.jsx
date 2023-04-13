@@ -26,7 +26,7 @@ const Chart = ({
 
   const stackedData = d3.stack().keys(subgroupNames)(data);
   const stackedDataWithSubgroup = stackedData.map((item) =>
-    item.map((subitem) => [...subitem, { ...subitem.data, subGroupName: item.key }]),
+    item.map((subitem) => [...subitem, { ...subitem.data, subgroupName: item.key }]),
   );
 
   const groupSizes = data.map((group) => {
@@ -75,7 +75,10 @@ const Chart = ({
       .style('font', '14px sans-serif')
       .style('color', axisLabelColor)
       .selectAll('.tick')
-      .style('cursor', 'pointer');
+      .style('cursor', 'pointer')
+      .on('click', (e, d) => {
+        selectionHandler('group', d);
+      });
     chart.select('path').style('opacity', '0.1');
 
     // Apply grid lines
@@ -107,14 +110,14 @@ const Chart = ({
       .attr('margin', 20)
       .attr('transform', `translate(${margin.left}, ${margin.top} )`)
       .attr('class', (d, i) => `${d[2].groupName}`)
-      .attr('id', (d, i) => `${d[2].subGroupName}`)
+      .attr('id', (d, i) => `${d[2].subgroupName}`)
       .style('cursor', 'pointer');
 
     const bars = chart.selectAll('rect');
 
     // chart hover
     bars.on('mouseenter', (e, d) => {
-      chartMouseHoverHandler(d[2].groupName, d[2].subGroupName);
+      chartMouseHoverHandler(d[2].groupName, d[2].subgroupName);
       d3.selectAll('rect').attr('opacity', '0.1');
       d3.selectAll(`[class="${d[2].groupName}"]`).attr('opacity', '1');
       d3.select(e.target).attr('stroke', 'white').attr('stroke-width', '2');
@@ -125,10 +128,8 @@ const Chart = ({
 
     // chart selection
     bars.on('click', (e, d) => {
-      const subgroupData = d[2].subgroupsData.find(
-        (subgroup) => subgroup.name === d[2].subGroupName,
-      );
-      subgroupData.selectionHandler();
+      selectionHandler('subgroup', d[2].subgroupName);
+      chart.selectAll('rect').attr('opacity', '1');
     });
 
     // Legend table interaction

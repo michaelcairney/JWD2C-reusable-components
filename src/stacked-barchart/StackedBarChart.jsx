@@ -4,6 +4,7 @@ import Chart from './Chart';
 import Legend from './Legend';
 import defaultFormatter from './defaultFormatter';
 import selectHyperCubeValue from '../qlik/functions/selectHyperCubeValue';
+import selectFieldValue from '../qlik/functions/selectFieldValue';
 
 const StyledContainer = styled.div`
   display: flex;
@@ -12,8 +13,9 @@ const StyledContainer = styled.div`
 `;
 
 const StackedBarChart = ({
+  app,
   data,
-  model,
+  dimensionNames,
   groupIndex,
   subgroupIndex,
   valueIndex,
@@ -26,8 +28,8 @@ const StackedBarChart = ({
   });
 
   const { barData, legendData, groupNames, subgroupNames } = useMemo(
-    () => defaultFormatter(data, model, groupIndex, subgroupIndex, valueIndex, active.group),
-    [data, model, active.group],
+    () => defaultFormatter(data, groupIndex, subgroupIndex, valueIndex, active.group),
+    [data, active.group],
   );
 
   const chartMouseHoverHandler = useCallback((group, subgroup) => {
@@ -44,8 +46,12 @@ const StackedBarChart = ({
     });
   }, []);
 
-  const selectionHandler = async (dimIndex, qElemNumber) => {
-    await selectHyperCubeValue(model, dimIndex, qElemNumber);
+  const selectionHandler = async (dimension, value) => {
+    if (dimension === 'group') {
+      await selectFieldValue(app, dimensionNames.group, value);
+    } else if (dimension === 'subgroup') {
+      await selectFieldValue(app, dimensionNames.subgroup, value);
+    }
   };
 
   return (
