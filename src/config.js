@@ -8,9 +8,9 @@ const config = {
   chartConfig: {
     // specify the index of the group, subgroup and value columns in the qlik data
     dataIndexes: {
-      groupDimIndex: 0,
-      subgroupDimIndex: 2,
-      valueDimIndex: 1,
+      groupIndex: 0,
+      subgroupIndex: 2,
+      valueIndex: 1,
     },
 
     colorOrder: [

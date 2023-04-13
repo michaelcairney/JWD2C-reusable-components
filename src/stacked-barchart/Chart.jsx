@@ -16,10 +16,10 @@ const Chart = ({
   colorOrder,
   chartMouseHoverHandler,
   chartMouseLeaveHandler,
+  selectionHandler,
 }) => {
   const chartRef = useRef(null);
   const wrapperRef = useRef(null);
-
   const margin = { right: 10, bottom: 150, top: 30, left: 100 };
   const height = 450;
   const width = 700;
@@ -28,6 +28,7 @@ const Chart = ({
   const stackedDataWithSubgroup = stackedData.map((item) =>
     item.map((subitem) => [...subitem, { ...subitem.data, subGroupName: item.key }]),
   );
+
   const groupSizes = data.map((group) => {
     return d3.sum(Object.values(group));
   });
@@ -73,8 +74,9 @@ const Chart = ({
       .call(xAxis)
       .style('font', '14px sans-serif')
       .style('color', axisLabelColor)
-      .select('path')
-      .style('opacity', '0.1');
+      .selectAll('.tick')
+      .style('cursor', 'pointer');
+    chart.select('path').style('opacity', '0.1');
 
     // Apply grid lines
     chart
@@ -105,7 +107,8 @@ const Chart = ({
       .attr('margin', 20)
       .attr('transform', `translate(${margin.left}, ${margin.top} )`)
       .attr('class', (d, i) => `${d[2].groupName}`)
-      .attr('id', (d, i) => `${d[2].subGroupName}`);
+      .attr('id', (d, i) => `${d[2].subGroupName}`)
+      .style('cursor', 'pointer');
 
     const bars = chart.selectAll('rect');
 
@@ -116,9 +119,16 @@ const Chart = ({
       d3.selectAll(`[class="${d[2].groupName}"]`).attr('opacity', '1');
       d3.select(e.target).attr('stroke', 'white').attr('stroke-width', '2');
     });
-
     bars.on('mouseleave', (e, d) => {
       d3.select(e.target).attr('stroke', 'none');
+    });
+
+    // chart selection
+    bars.on('click', (e, d) => {
+      const subgroupData = d[2].subgroupsData.find(
+        (subgroup) => subgroup.name === d[2].subGroupName,
+      );
+      subgroupData.selectionHandler();
     });
 
     // Legend table interaction

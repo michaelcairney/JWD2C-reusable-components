@@ -16,18 +16,21 @@ function App() {
   } = config;
 
   const app = useApp(host, appId);
-  const { data } = useObject(app, stackedBarChartId);
+  const { data, model, layout } = useObject(app, stackedBarChartId);
 
-  const { groupDimIndex, subgroupDimIndex, valueDimIndex } = dataIndexes
+  const { groupIndex, subgroupIndex, valueIndex } = dataIndexes
 
   if (data?.length) {
+    // app.clearAll()
     return (
       <StyledScreenContainer>
         <StackedBarChart
           data={data}
-          groupDimIndex={groupDimIndex}
-          subgroupDimIndex={subgroupDimIndex}
-          valueDimIndex={valueDimIndex}
+          model={model}
+          layout={layout}
+          groupIndex={groupIndex}
+          subgroupIndex={subgroupIndex}
+          valueIndex={valueIndex}
           tableHeaders={tableHeaders}
           colorOrder={colorOrder}
         />

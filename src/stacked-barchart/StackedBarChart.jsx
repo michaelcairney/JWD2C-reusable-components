@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Chart from './Chart';
 import Legend from './Legend';
 import defaultFormatter from './defaultFormatter';
+import selectHyperCubeValue from '../qlik/functions/selectHyperCubeValue';
 
 const StyledContainer = styled.div`
   display: flex;
@@ -12,9 +13,10 @@ const StyledContainer = styled.div`
 
 const StackedBarChart = ({
   data,
-  groupDimIndex,
-  subgroupDimIndex,
-  valueDimIndex,
+  model,
+  groupIndex,
+  subgroupIndex,
+  valueIndex,
   tableHeaders,
   colorOrder,
 }) => {
@@ -24,15 +26,8 @@ const StackedBarChart = ({
   });
 
   const { barData, legendData, groupNames, subgroupNames } = useMemo(
-    () =>
-      defaultFormatter(
-        data,
-        groupDimIndex,
-        subgroupDimIndex,
-        valueDimIndex,
-        active.group,
-      ),
-    [active.group],
+    () => defaultFormatter(data, model, groupIndex, subgroupIndex, valueIndex, active.group),
+    [data, model, active.group],
   );
 
   const chartMouseHoverHandler = useCallback((group, subgroup) => {
@@ -49,6 +44,10 @@ const StackedBarChart = ({
     });
   }, []);
 
+  const selectionHandler = async (dimIndex, qElemNumber) => {
+    await selectHyperCubeValue(model, dimIndex, qElemNumber);
+  };
+
   return (
     <StyledContainer>
       <Chart
@@ -58,12 +57,14 @@ const StackedBarChart = ({
         colorOrder={colorOrder}
         chartMouseHoverHandler={chartMouseHoverHandler}
         chartMouseLeaveHandler={chartMouseLeaveHandler}
+        selectionHandler={selectionHandler}
       />
       <Legend
         data={legendData}
         colorOrder={colorOrder}
         activeSubgroup={active.subgroup}
         tableHeaders={tableHeaders}
+        selectionHandler={selectionHandler}
       />
     </StyledContainer>
   );

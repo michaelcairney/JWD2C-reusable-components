@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import selectHyperCubeValue from '../qlik/functions/selectHyperCubeValue';
 
 const StyledContainer = styled.section`
   display: flex;
@@ -80,12 +81,11 @@ const StyledIndexBar = styled.div`
 const Legend = ({ data, colorOrder, activeSubgroup, tableHeaders }) => {
   const tableHighlightColor = '#2f3b46';
   const tableColor = '#1d262c';
-
   return (
     <StyledContainer>
       <StyledHeaderContainer>
-        {tableHeaders.map((header) => (
-          <StyledHeaderItem>{header}</StyledHeaderItem>
+        {tableHeaders.map((header, index) => (
+          <StyledHeaderItem key={`${header}-${index}`}>{header}</StyledHeaderItem>
         ))}
       </StyledHeaderContainer>
 
@@ -94,9 +94,8 @@ const Legend = ({ data, colorOrder, activeSubgroup, tableHeaders }) => {
           key={`${subgroup.name}-${index}`}
           className="legendRow"
           id={subgroup.name}
-          highlight={
-            activeSubgroup === subgroup.name ? tableHighlightColor : tableColor
-          }
+          highlight={activeSubgroup === subgroup.name ? tableHighlightColor : tableColor}
+          onClick={subgroup.selectionHandler}
         >
           <StyledRowItem className="child" id={subgroup.name}>
             <StyledIndexBar color={colorOrder[index]} /> {subgroup.name}
