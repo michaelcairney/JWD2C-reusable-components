@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import selectHyperCubeValue from '../qlik/functions/selectHyperCubeValue';
+import selectHyperCubeValue from '../../qlik/functions/selectHyperCubeValue';
 
 const StyledContainer = styled.section`
   display: flex;
@@ -8,7 +8,7 @@ const StyledContainer = styled.section`
   height: 100%;
   width: 40%;
   font-family: sans-serif;
-  font-size: 1.9vh;
+  font-size: 0.9vw;
   margin-right: 30px;
   justify-content: center;
 `;
@@ -16,7 +16,7 @@ const StyledContainer = styled.section`
 const StyledHeaderContainer = styled.div`
   display: flex;
   flex-direction: row;
-  height: 10%;
+  height: 3vw;
   cursor: default;
 `;
 
@@ -24,7 +24,6 @@ const StyledHeaderItem = styled.div`
   display: flex;
   align-items: center;
   background: #253038;
-  height: 100%;
   border-bottom: 1px solid #c1d1cf21;
   box-sizing: border-box;
   :nth-child(1) {
@@ -46,7 +45,7 @@ const StyledHeaderItem = styled.div`
 `;
 
 const StyledRowContainer = styled(StyledHeaderContainer)`
-  height: 7.5%;
+  height: 3vw;
   .child {
     background: ${({ highlight }) => highlight};
   }

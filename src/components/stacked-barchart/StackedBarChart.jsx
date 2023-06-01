@@ -1,10 +1,11 @@
 import { useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
+
 import Chart from './Chart';
 import Legend from './Legend';
 import defaultFormatter from './defaultFormatter';
-import selectHyperCubeValue from '../qlik/functions/selectHyperCubeValue';
-import selectFieldValue from '../qlik/functions/selectFieldValue';
+import selectFieldValue from '../../qlik/functions/selectFieldValue';
 
 const StyledContainer = styled.div`
   display: flex;
@@ -15,7 +16,7 @@ const StyledContainer = styled.div`
 const StackedBarChart = ({
   app,
   data,
-  dimensionNames,
+  fieldNames,
   groupIndex,
   subgroupIndex,
   valueIndex,
@@ -24,7 +25,7 @@ const StackedBarChart = ({
 }) => {
   const [active, setActive] = useState({
     group: null,
-    subgroup: null,
+    value: null,
   });
 
   const { barData, legendData, groupNames, subgroupNames } = useMemo(
@@ -48,9 +49,9 @@ const StackedBarChart = ({
 
   const selectionHandler = async (dimension, value) => {
     if (dimension === 'group') {
-      await selectFieldValue(app, dimensionNames.group, value);
+      await selectFieldValue(app, fieldNames.group, value);
     } else if (dimension === 'subgroup') {
-      await selectFieldValue(app, dimensionNames.subgroup, value);
+      await selectFieldValue(app, fieldNames.subgroup, value);
     }
   };
 
@@ -75,5 +76,58 @@ const StackedBarChart = ({
     </StyledContainer>
   );
 };
+
+StackedBarChart.propTypes = {
+  /**
+   * A valid qlik app/doc
+   */
+  app: PropTypes.array,
+
+  /**
+   * Array of data to use (default is raw qlik data)
+   */
+  data: PropTypes.array,
+
+  /**
+   * The associated field names for the group and subgroup
+   */
+  fieldNames: PropTypes.object,
+
+  /**
+   * The column index in the qlik table for the group dimension
+   */
+  groupIndex: PropTypes.number,
+
+  /**
+   * The column index in the qlik table for the subgroup dimension
+   */
+  subgroupIndex: PropTypes.number,
+
+  /**
+   * The column index in the qlik table for the value/measure
+   */
+  valueIndex: PropTypes.number,
+
+  /**
+   * An array of 3 strings to specify the headers in the legend
+   */
+  tableHeaders: PropTypes.array,
+
+  /**
+   * An array of colours (must be of same length as number of subgroups)
+   */
+  colorOrder: PropTypes.array,
+};
+
+// StackedBarChart.defaultProps = {
+//   app: null,
+//   data: [],
+//   fieldNames: { group: '', subgroup: '' },
+//   groupIndex: null,
+//   subgroupIndex: null,
+//   valueIndex: null,
+//   tableHeaders: [],
+//   colorOrder: [PropTypes.array],
+// };
 
 export default StackedBarChart;

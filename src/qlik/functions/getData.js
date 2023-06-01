@@ -4,7 +4,7 @@ const getData = async (model) => {
   const layout = await model.getLayout();
   const pageDimensions = getFullObjectDimensions(layout);
 
-  if (model.genericType === 'table' || model.genericType === 'kpi') {
+  if (model.genericType === 'table' || model.genericType === 'kpi' || model.genericType === "combochart" || model.genericType === 'linechart') {
     const data = await model.getHyperCubeData('/qHyperCubeDef', pageDimensions);
     return data;
   }

@@ -50,7 +50,7 @@ const Chart = ({
     .tickFormat((d) => ``);
 
   const axisLabelColor = '#b9c4c4';
-  const gridColor = '#889291';
+  const gridColor = '#928888';
 
   useEffect(() => {
     const chart = d3.select(chartRef.current);
